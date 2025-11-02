@@ -1,0 +1,26 @@
+[package]
+name = "TodoApp"
+version = "1.0.0"
+authors = ["Manas Jha"]
+
+[addresses]
+todo_address = "_"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "aptos-node-v1.15.0"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dependencies.AptosStdlib]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "aptos-node-v1.15.0"
+subdir = "aptos-move/framework/aptos-stdlib"
+
+[dependencies.MoveStdlib]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "aptos-node-v1.15.0"
+subdir = "aptos-move/framework/move-stdlib"
+
+[dev-dependencies]

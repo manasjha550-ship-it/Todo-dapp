@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo dApp - Aptos Blockchain</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Todo dApp</h1>
+            <p>Manage your tasks permanently on Aptos blockchain</p>
+            <div class="wallet-section">
+                <div id="wallet-disconnected">
+                    <button id="connect-wallet-btn" class="btn btn-primary">
+                        🔗 Connect Petra Wallet
+                    </button>
+                    <div class="wallet-info">
+                        <small>Don't have Petra? <a href="https://petra.app/" target="_blank">Download here</a></small>
+                    </div>
+                </div>
+                
+                <div id="wallet-connected" class="hidden">
+                    <div class="wallet-details">
+                        <span id="wallet-address"></span>
+                        <button id="disconnect-wallet-btn" class="btn btn-secondary">Disconnect</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content" class="hidden">
+            <!-- Statistics Dashboard -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <h3 id="total-tasks">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="completed-tasks">0</h3>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <h3 id="pending-tasks">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <h3 id="overdue-tasks">0</h3>
+                            <p>Overdue</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Task Form -->
+            <section class="add-task-section">
+                <div class="card">
+                    <h2>➕ Add New Task</h2>
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label for="title">Task Title</label>
+                            <input type="text" id="title" name="title" placeholder="What needs to be done?" required maxlength="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Add more details..." rows="3" maxlength="500"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="priority">Priority</label>
+                                <select id="priority" name="priority" required>
+                                    <option value="1">🟢 Low</option>
+                                    <option value="2" selected>🟡 Medium</option>
+                                    <option value="3">🔴 High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="Work">💼 Work</option>
+                                    <option value="Personal">👤 Personal</option>
+                                    <option value="Health">🏥 Health</option>
+                                    <option value="Shopping">🛒 Shopping</option>
+                                    <option value="Study">📚 Study</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="due-date">Due Date (Optional)</label>
+                            <input type="datetime-local" id="due-date" name="due-date">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large" id="add-task-btn">
+                            🚀 Add to Blockchain
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Task Filters -->
+            <section class="filter-section">
+                <div class="card">
+                    <div class="filter-controls">
+                        <h3>📊 Filter Tasks</h3>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">All Tasks</button>
+                            <button class="filter-btn" data-filter="pending">Pending</button>
+                            <button class="filter-btn" data-filter="completed">Completed</button>
+                            <button class="filter-btn" data-filter="overdue">Overdue</button>
+                        </div>
+                        <div class="filter-dropdowns">
+                            <select id="priority-filter">
+                                <option value="">All Priorities</option>
+                                <option value="1">🟢 Low</option>
+                                <option value="2">🟡 Medium</option>
+                                <option value="3">🔴 High</option>
+                            </select>
+                            <select id="category-filter">
+                                <option value="">All Categories</option>
+                                <option value="Work">💼 Work</option>
+                                <option value="Personal">👤 Personal</option>
+                                <option value="Health">🏥 Health</option>
+                                <option value="Shopping">🛒 Shopping</option>
+                                <option value="Study">📚 Study</option>
+                                <option value="Other">📦 Other</option>
+                            </select>
+                            <button id="refresh-btn" class="btn btn-secondary">🔄 Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <div class="card">
+                    <div class="section-header">
+                        <h2 id="tasks-section-title">📋 All Tasks</h2>
+                        <div class="task-count">
+                            <span id="filtered-count">0</span> tasks
+                        </div>
+                    </div>
+                    
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <p>Loading tasks from blockchain...</p>
+                    </div>
+                    
+                    <div id="tasks-list"></div>
+                    
+                    <div id="empty-tasks" class="empty-state hidden">
+                        <div class="empty-icon">📝</div>
+                        <h3>No tasks yet!</h3>
+                        <p>Add your first task to start organizing on the blockchain.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Breakdown -->
+            <section class="category-section">
+                <div class="card">
+                    <h2>📊 Tasks by Category</h2>
+                    <div id="category-breakdown"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Alerts -->
+        <div id="alerts"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <h3>📝 About Todo dApp</h3>
+                <div class="footer-grid">
+                    <div>
+                        <h4>Features</h4>
+                        <ul>
+                            <li>Permanent blockchain storage</li>
+                            <li>Priority-based organization</li>
+                            <li>Category management</li>
+                            <li>Due date tracking</li>
+                            <li>Progress statistics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Blockchain</h4>
+                        <ul>
+                            <li>Aptos Testnet</li>
+                            <li>Move smart contracts</li>
+                            <li>Petra wallet integration</li>
+                            <li>Decentralized task storage</li>
+                            <li>Event-driven updates</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>Built with Aptos | Powered by Blockchain Technology</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
